@@ -5,6 +5,15 @@ This repository is built to help you learn database design by practice.
 
 ---
 
+## Table of Contents
+- [Purpose](#purpose)  
+- [Who is this for?](#who-is-this-for)  
+- [How to Use](#how-to-use)  
+- [Problem 01: Company Employees and Departments](#problem-01-company-employees-and-departments)  
+- [Solution 01: Company Employees and Departments](#solution-01-company-employees-and-departments)  
+
+---
+
 ## Purpose
 - Practice creating **Entity Relationship Diagrams (ERDs)**  
 - Work on **simple, real-world scenarios**  
@@ -19,21 +28,21 @@ This repository is built to help you learn database design by practice.
 
 ---
 
-## What’s Inside?
-- Real-world inspired scenarios  
-- Practice problems with clear solutions  
-- A gradual learning curve to make ERD design easy and intuitive  
+## How to Use
+All problems and solutions are included directly in this README.  
+
+1. Read a **Problem** section.  
+2. Try to solve it on your own by identifying entities, attributes, and relationships.  
+3. Draw your own ERD diagram.  
+4. Scroll down to the matching **Solution** section to compare with the provided answer.  
 
 ---
 
-### Problems
+## Problem 01: Company Employees and Departments
 
----
-# Problem 01: Company Employees and Departments
-
-## Description
+### Description
 A company wants to store information about its employees and departments.  
-You are asked to design an Entity Relationship Diagram (ERD) for the following scenario:
+You are asked to design an ERD for the following scenario:
 
 - Each employee has: SSN, First Name, Last Name, Birth Date, and Gender.  
 - Each department has: Department Number (unique), Department Name, and Location(s).  
@@ -41,33 +50,39 @@ You are asked to design an Entity Relationship Diagram (ERD) for the following s
 - A department can have multiple employees.  
 - Each department has one manager.  
 
-## Requirements
+### Requirements
 1. Identify the entities.  
 2. Identify the attributes for each entity.  
 3. Define the relationships between entities.  
-4. Represent the ERD diagram.  
+4. Draw the ERD diagram.  
+5. Map the ERD to relational schema.  
 
-## Diagram Placeholder
-![Problem 01 ERD](../images/problem01.png)
+---
 
-# Solution 01: Company Employees and Departments
+## Solution 01: Company Employees and Departments
 
-## Entities and Attributes
+### Entities and Attributes
 - **Employee**
-  - SSN (Primary Key)
-  - First Name
-  - Last Name
-  - Birth Date
+  - SSN (Primary Key)  
+  - First Name  
+  - Last Name  
+  - Birth Date  
   - Gender  
 
 - **Department**
-  - Department Number (Primary Key)
-  - Department Name
+  - Department Number (Primary Key)  
+  - Department Name  
   - Location  
 
-## Relationships
-- **Works_In**: Each employee works in one department (1:N relationship).  
-- **Manages**: Each department has one manager (1:1 relationship between Department and Employee).  
+### Relationships
+- **Works_In**: Each employee works in one department (1:N).  
+- **Manages**: Each department has one manager (1:1 between Department and Employee).  
 
-## Final ERD
-![Solution 01 ERD](../images/solution01.png)
+### ERD Diagram
+![Solution 01 ERD](images/solution01.png)
+
+### ER-to-Relational Mapping
+- **Employee(SSN, FirstName, LastName, BirthDate, Gender, DeptNo)**  
+- **Department(DeptNo, DeptName, Location, ManagerSSN)**  
+
+---
