@@ -56,6 +56,7 @@ You are asked to design an ERD for the following scenario:
 3. Define the relationships between entities.  
 4. Draw the ERD diagram.  
 5. Map the ERD to relational schema.  
+6. Write SQL code in PostgreSQL to create the schema.  
 
 ---
 
@@ -85,4 +86,24 @@ You are asked to design an ERD for the following scenario:
 - **Employee(SSN, FirstName, LastName, BirthDate, Gender, DeptNo)**  
 - **Department(DeptNo, DeptName, Location, ManagerSSN)**  
 
----
+### PostgreSQL Implementation
+```sql
+-- Create Department table
+CREATE TABLE Department (
+    DeptNo SERIAL PRIMARY KEY,
+    DeptName VARCHAR(100) NOT NULL,
+    Location VARCHAR(100),
+    ManagerSSN CHAR(9) UNIQUE
+);
+
+-- Create Employee table
+CREATE TABLE Employee (
+    SSN CHAR(9) PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    BirthDate DATE NOT NULL,
+    Gender CHAR(1) CHECK (Gender IN ('M', 'F')),
+    DeptNo INT NOT NULL,
+    FOREIGN KEY (DeptNo) REFERENCES Department(DeptNo),
+    CONSTRAINT fk_manager FOREIGN KEY (SSN) REFERENCES Department(ManagerSSN)
+);
