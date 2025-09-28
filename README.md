@@ -590,173 +590,165 @@ CREATE TABLE Enrollment (
 ```
 ---
 
-## Problem 07: Library Management System  
+## Problem 07: Project Management System
 
-### Description  
-A library needs to manage data about members, books, authors, staff, borrowings, and fines.  
-You are asked to design an ERD for the following scenario:  
+### Description
+A software company needs a system to manage its projects, tasks, and employees. The system must track project details, task assignments, team compositions, and task dependencies.
+You are asked to design an ERD for the following scenario:
 
-- Each member has: MemberID, Name, Email, and Address.  
-- Each author has: AuthorID, Name, and Nationality.  
-- Each book has: BookID, Title, ISBN, and PublicationYear.  
-- A book can be written by one or more authors, and an author can write many books.  
-- Each member can borrow many books, and each book can be borrowed by many members over time. For each borrowing, the system stores BorrowDate and ReturnDate.  
-- If a member returns a book late, a fine is issued. Each fine has: FineID, Amount, and PaymentStatus. A fine must be linked to exactly one borrowing.  
-- The library also employs staff. Each staff member has: StaffID, Name, and HireDate.  
-- Staff are divided into two categories (specialization):  
-  - **Librarian**: manages borrowing and fines. (Attributes: LibrarianID, Shift)  
-  - **Technician**: maintains books. (Attributes: TechnicianID, Expertise)  
+-   The system manages multiple **Projects**. Each project has a ProjectID, Name, StartDate, EndDate, and Budget.
+-   Each project is composed of multiple **Tasks**. Each task has a TaskID, Description, DueDate, Status (e.g., 'To Do', 'In Progress', 'Done'), and Priority (e.g., 'High', 'Medium', 'Low'). A task must belong to exactly one project.
+-   Tasks can have dependencies. A task can be a prerequisite for one or more other tasks. This creates a self-referencing relationship on the Task entity.
+-   The company has **Employees**. Each employee has an EmployeeID, Name, Email, and JobTitle.
+-   Employees are organized into **Teams**. Each team has a TeamID and a TeamName. An employee can belong to only one team at a time, but a team consists of many employees.
+-   Tasks are assigned to employees. An employee can be assigned many tasks, and a task can be assigned to multiple employees (a joint task). For each assignment, the system should record the date of assignment.
+-   The system also needs to track **TimeLogs**. An employee can log time spent on a specific task. Each time log entry should have a LogID, HoursWorked, and the date the work was performed.
 
-### Requirements  
-1. Identify the entities.  
-2. Identify the attributes for each entity.  
-3. Identify any weak entities.  
-4. Define the relationships between entities (detect the cardinality and participation).  
-5. Represent the specialization/generalization.  
-6. Draw the ERD diagram.  
-7. Map the ERD to relational schema.  
-8. Write SQL code in PostgreSQL to create the schema.  
+### Requirements
+1.  Identify all the entities.
+2.  Identify the attributes for each entity, including primary and foreign keys.
+3.  Identify any weak entities.
+4.  Define the relationships between entities (detect the cardinality and participation).
+5.  Represent any self-referencing (recursive) relationships.
+6.  Draw the ERD diagram.
+7.  Map the ERD to a relational schema.
+8.  Write SQL code in PostgreSQL to create the schema.
 
 ---
 
-## Solution 07: Library Management System  
+## Solution 07: Project Management System
 
-### Entities and Attributes  
-- **Member**  
-  - MemberID (Primary Key)  
-  - Name  
-  - Email  
-  - Address  
+### Entities and Attributes
+-   **Project**
+    -   ProjectID (Primary Key)
+    -   Name
+    -   StartDate
+    -   EndDate
+    -   Budget
 
-- **Author**  
-  - AuthorID (Primary Key)  
-  - Name  
-  - Nationality  
+-   **Task**
+    -   TaskID (Primary Key)
+    -   Description
+    -   DueDate
+    -   Status
+    -   Priority
+    -   ProjectID (Foreign Key)
 
-- **Book**  
-  - BookID (Primary Key)  
-  - Title  
-  - ISBN  
-  - PublicationYear  
+-   **TaskDependency (Associative Entity for Task's recursive relationship)**
+    -   PrerequisiteTaskID (Foreign Key)
+    -   DependentTaskID (Foreign Key)
+    -   PRIMARY KEY (PrerequisiteTaskID, DependentTaskID)
 
-- **Borrowing (Weak Entity)**  
-  - BorrowID (Primary Key)  
-  - BorrowDate  
-  - ReturnDate  
-  - MemberID (Foreign Key)  
-  - BookID (Foreign Key)  
+-   **Employee**
+    -   EmployeeID (Primary Key)
+    -   Name
+    -   Email
+    -   JobTitle
+    -   TeamID (Foreign Key)
 
-- **Fine**  
-  - FineID (Primary Key)  
-  - Amount  
-  - PaymentStatus  
-  - BorrowID (Foreign Key, Unique)  
+-   **Team**
+    -   TeamID (Primary Key)
+    -   TeamName
 
-- **Staff (Superclass)**  
-  - StaffID (Primary Key)  
-  - Name  
-  - HireDate  
+-   **TaskAssignment (Associative Entity for Employee-Task)**
+    -   EmployeeID (Foreign Key)
+    -   TaskID (Foreign Key)
+    -   AssignmentDate
+    -   PRIMARY KEY (EmployeeID, TaskID)
 
-- **Librarian (Subclass of Staff)**  
-  - StaffID (Primary Key, Foreign Key)  
-  - Shift  
+-   **TimeLog**
+    -   LogID (Primary Key)
+    -   HoursWorked
+    -   LogDate
+    -   EmployeeID (Foreign Key)
+    -   TaskID (Foreign Key)
 
-- **Technician (Subclass of Staff)**  
-  - StaffID (Primary Key, Foreign Key)  
-  - Expertise  
+### Relationships
+-   **Project–Task**: 1:N (One Project has many Tasks). A Task must belong to exactly one Project.
+-   **Team–Employee**: 1:N (One Team has many Employees). An Employee belongs to one Team.
+-   **Task–Task (Dependency)**: M:N (A Task can have many prerequisite tasks, and can be a prerequisite for many other tasks). This is a recursive relationship modeled with the `TaskDependency` associative entity.
+-   **Employee–Task (Assignment)**: M:N (An Employee can be assigned many Tasks, and a Task can be assigned to many Employees). Modeled with the `TaskAssignment` associative entity.
+-   **Employee–Task (Time Logging)**: The `TimeLog` entity connects an Employee and a Task, representing a many-to-one relationship from `TimeLog` to both `Employee` and `Task`. An employee logs time for a specific task.
 
-### Relationships  
-- **Book–Author**: M:N  
-- **Member–Borrowing–Book**: M:N (Borrowing is weak entity with attributes BorrowDate, ReturnDate)  
-- **Borrowing–Fine**: 1:1 (each borrowing can have at most one fine)  
-- **Staff Specialization**: Staff ISA Librarian, Staff ISA Technician  
+### ERD Diagram
+*(A diagram would be drawn here showing the entities and relationships as described)*
+![Problem 8 Chen Solution](assets/Problem8ChenSolution.png)
 
-### ERD Diagram  
-![Problem 7 Chen Solution](assets/Problem7ChenSolution.png)  
+### ER-to-Relational Mapping
+-   **Project(<u>ProjectID</u>, Name, StartDate, EndDate, Budget)**
+-   **Team(<u>TeamID</u>, TeamName)**
+-   **Employee(<u>EmployeeID</u>, Name, Email, JobTitle, *TeamID*)**
+-   **Task(<u>TaskID</u>, Description, DueDate, Status, Priority, *ProjectID*)**
+-   **TaskDependency(<u>*PrerequisiteTaskID*</u>, <u>*DependentTaskID*</u>)**
+-   **TaskAssignment(<u>*EmployeeID*</u>, <u>*TaskID*</u>, AssignmentDate)**
+-   **TimeLog(<u>LogID</u>, HoursWorked, LogDate, *EmployeeID*, *TaskID*)**
 
-### ER-to-Relational Mapping  
-- **Member(MemberID, Name, Email, Address)**  
-- **Author(AuthorID, Name, Nationality)**  
-- **Book(BookID, Title, ISBN, PublicationYear)**  
-- **BookAuthor(BookID, AuthorID)**  
-- **Borrowing(BorrowID, BorrowDate, ReturnDate, MemberID, BookID)**  
-- **Fine(FineID, Amount, PaymentStatus, BorrowID)**  
-- **Staff(StaffID, Name, HireDate)**  
-- **Librarian(StaffID, Shift)**  
-- **Technician(StaffID, Expertise)**  
-
-### PostgreSQL Implementation  
+### PostgreSQL Implementation
 ```sql
--- Create Member table
-CREATE TABLE Member (
-    MemberID SERIAL PRIMARY KEY,
+-- Create Project table
+CREATE TABLE Project (
+    ProjectID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    StartDate DATE,
+    EndDate DATE,
+    Budget DECIMAL(12, 2)
+);
+
+-- Create Team table
+CREATE TABLE Team (
+    TeamID SERIAL PRIMARY KEY,
+    TeamName VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Create Employee table
+CREATE TABLE Employee (
+    EmployeeID SERIAL PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
     Email VARCHAR(100) UNIQUE NOT NULL,
-    Address VARCHAR(200)
+    JobTitle VARCHAR(50),
+    TeamID INT,
+    FOREIGN KEY (TeamID) REFERENCES Team(TeamID) ON DELETE SET NULL
 );
 
--- Create Author table
-CREATE TABLE Author (
-    AuthorID SERIAL PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    Nationality VARCHAR(50)
+-- Create Task table
+CREATE TABLE Task (
+    TaskID SERIAL PRIMARY KEY,
+    Description TEXT NOT NULL,
+    DueDate DATE,
+    Status VARCHAR(20) NOT NULL DEFAULT 'To Do',
+    Priority VARCHAR(20) NOT NULL DEFAULT 'Medium',
+    ProjectID INT NOT NULL,
+    FOREIGN KEY (ProjectID) REFERENCES Project(ProjectID) ON DELETE CASCADE
 );
 
--- Create Book table
-CREATE TABLE Book (
-    BookID SERIAL PRIMARY KEY,
-    Title VARCHAR(200) NOT NULL,
-    ISBN VARCHAR(20) UNIQUE,
-    PublicationYear INT
+-- Create TaskDependency table (M:N recursive relationship on Task)
+CREATE TABLE TaskDependency (
+    PrerequisiteTaskID INT NOT NULL,
+    DependentTaskID INT NOT NULL,
+    PRIMARY KEY (PrerequisiteTaskID, DependentTaskID),
+    FOREIGN KEY (PrerequisiteTaskID) REFERENCES Task(TaskID) ON DELETE CASCADE,
+    FOREIGN KEY (DependentTaskID) REFERENCES Task(TaskID) ON DELETE CASCADE,
+    CHECK (PrerequisiteTaskID <> DependentTaskID)
 );
 
--- Create BookAuthor (M:N)
-CREATE TABLE BookAuthor (
-    BookID INT NOT NULL,
-    AuthorID INT NOT NULL,
-    PRIMARY KEY (BookID, AuthorID),
-    FOREIGN KEY (BookID) REFERENCES Book(BookID),
-    FOREIGN KEY (AuthorID) REFERENCES Author(AuthorID)
+-- Create TaskAssignment table (M:N between Employee and Task)
+CREATE TABLE TaskAssignment (
+    EmployeeID INT NOT NULL,
+    TaskID INT NOT NULL,
+    AssignmentDate DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY (EmployeeID, TaskID),
+    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID) ON DELETE CASCADE,
+    FOREIGN KEY (TaskID) REFERENCES Task(TaskID) ON DELETE CASCADE
 );
 
--- Create Borrowing table (Weak Entity)
-CREATE TABLE Borrowing (
-    BorrowID SERIAL PRIMARY KEY,
-    BorrowDate DATE NOT NULL,
-    ReturnDate DATE,
-    MemberID INT NOT NULL,
-    BookID INT NOT NULL,
-    FOREIGN KEY (MemberID) REFERENCES Member(MemberID),
-    FOREIGN KEY (BookID) REFERENCES Book(BookID)
-);
-
--- Create Fine table (1:1 with Borrowing)
-CREATE TABLE Fine (
-    FineID SERIAL PRIMARY KEY,
-    Amount DECIMAL(10,2) NOT NULL,
-    PaymentStatus VARCHAR(20) NOT NULL,
-    BorrowID INT UNIQUE NOT NULL,
-    FOREIGN KEY (BorrowID) REFERENCES Borrowing(BorrowID)
-);
-
--- Create Staff table (Superclass)
-CREATE TABLE Staff (
-    StaffID SERIAL PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    HireDate DATE NOT NULL
-);
-
--- Create Librarian table (Subclass of Staff)
-CREATE TABLE Librarian (
-    StaffID INT PRIMARY KEY,
-    Shift VARCHAR(50),
-    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
-);
-
--- Create Technician table (Subclass of Staff)
-CREATE TABLE Technician (
-    StaffID INT PRIMARY KEY,
-    Expertise VARCHAR(100),
-    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+-- Create TimeLog table
+CREATE TABLE TimeLog (
+    LogID SERIAL PRIMARY KEY,
+    HoursWorked DECIMAL(4, 2) NOT NULL,
+    LogDate DATE NOT NULL,
+    EmployeeID INT NOT NULL,
+    TaskID INT NOT NULL,
+    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID) ON DELETE CASCADE,
+    FOREIGN KEY (TaskID) REFERENCES Task(TaskID) ON DELETE CASCADE
 );
 ```
