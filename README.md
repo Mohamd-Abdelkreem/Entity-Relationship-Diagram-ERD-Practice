@@ -176,3 +176,88 @@ CREATE TABLE Book (
     FOREIGN KEY (MemberID) REFERENCES Member(MemberID)
 );
 ```
+
+---
+
+## Problem 03: Students, Courses, and Enrollments
+
+### Description
+A university wants to store information about its students, courses, and enrollments.  
+You are asked to design an ERD for the following scenario:
+
+- Each student has: Student ID, Name, Major, and Email.  
+- Each course has: Course ID, Course Name, and Credits.  
+- Students can enroll in many courses.  
+- A course can have many students.  
+- Each enrollment also stores the **Grade** the student received.  
+
+### Requirements
+1. Identify the entities.  
+2. Identify the attributes for each entity.  
+3. Define the relationships between entities.  
+4. Draw the ERD diagram.  
+5. Map the ERD to relational schema.  
+6. Write SQL code in PostgreSQL to create the schema.  
+
+---
+
+## Solution 03: Students, Courses, and Enrollments
+
+### Entities and Attributes
+- **Student**
+  - StudentID (Primary Key)  
+  - Name  
+  - Major  
+  - Email  
+
+- **Course**
+  - CourseID (Primary Key)  
+  - CourseName  
+  - Credits  
+
+- **Enrollment**
+  - StudentID (Foreign Key)  
+  - CourseID (Foreign Key)  
+  - Grade  
+
+### Relationships
+- **Enrolls_In**:  
+  - A student can enroll in many courses.  
+  - A course can have many students.  
+  - This is a **many-to-many (M:N)** relationship, resolved with the **Enrollment** table.  
+
+### ERD Diagram
+![Problem 3 Chen Solution](assets/Problem3ChenSolution.png)
+
+### ER-to-Relational Mapping
+- **Student(StudentID, Name, Major, Email)**  
+- **Course(CourseID, CourseName, Credits)**  
+- **Enrollment(StudentID, CourseID, Grade)**  
+
+### PostgreSQL Implementation
+```sql
+-- Create Student table
+CREATE TABLE Student (
+    StudentID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Major VARCHAR(100),
+    Email VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Create Course table
+CREATE TABLE Course (
+    CourseID SERIAL PRIMARY KEY,
+    CourseName VARCHAR(100) NOT NULL,
+    Credits INT CHECK (Credits > 0)
+);
+
+-- Create Enrollment table (M:N relationship)
+CREATE TABLE Enrollment (
+    StudentID INT,
+    CourseID INT,
+    Grade CHAR(2),
+    PRIMARY KEY (StudentID, CourseID),
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+);
+```
