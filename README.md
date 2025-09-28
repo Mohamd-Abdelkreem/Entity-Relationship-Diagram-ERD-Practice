@@ -265,24 +265,19 @@ CREATE TABLE Enrollment (
 
 ## Problem 04: Hospital Management System
 
+---
+
+## Problem 04: Hospital Management System
+
 ### Description
 A hospital wants to manage data about doctors, patients, and appointments.  
 You are asked to design an ERD for the following scenario:
 
 - Each doctor has: DoctorID, Name, Specialty, and Phone.  
 - Each patient has: PatientID, Name, Address, and Phone.  
-- A doctor can have many appointments, but each appointment is with exactly one doctor.  
-- A patient can have many appointments, but each appointment is for exactly one patient.  
-- An appointment has: AppointmentID, Date, and Time.  
-
-### Cardinality and Participation
-- **Doctor–Appointment**:  
-  - Cardinality: 1:N (One doctor can have many appointments).  
-  - Participation: Total on Appointment (every appointment must be linked to a doctor), Partial on Doctor (a doctor may have zero appointments).  
-
-- **Patient–Appointment**:  
-  - Cardinality: 1:N (One patient can have many appointments).  
-  - Participation: Total on Appointment (every appointment must be linked to a patient), Partial on Patient (a patient may have zero appointments).  
+- A doctor **can have many appointments** (1:N), but each appointment **must belong to exactly one doctor** (total participation from Appointment, partial from Doctor).  
+- A patient **can have many appointments** (1:N), but each appointment **must belong to exactly one patient** (total participation from Appointment, partial from Patient).  
+- Each appointment has: AppointmentID, Date, and Time.  
 
 ### Requirements
 1. Identify the entities.  
@@ -293,6 +288,7 @@ You are asked to design an ERD for the following scenario:
 6. Write SQL code in PostgreSQL to create the schema.  
 
 ---
+
 
 ## Solution 04: Hospital Management System
 
