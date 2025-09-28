@@ -265,10 +265,6 @@ CREATE TABLE Enrollment (
 
 ## Problem 04: Hospital Management System
 
----
-
-## Problem 04: Hospital Management System
-
 ### Description
 A hospital wants to manage data about doctors, patients, and appointments.  
 You are asked to design an ERD for the following scenario:
