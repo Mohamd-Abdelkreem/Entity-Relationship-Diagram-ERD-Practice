@@ -261,3 +261,99 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 ```
+---
+
+## Problem 04: Hospital Management System
+
+### Description
+A hospital wants to manage data about doctors, patients, and appointments.  
+You are asked to design an ERD for the following scenario:
+
+- Each doctor has: DoctorID, Name, Specialty, and Phone.  
+- Each patient has: PatientID, Name, Address, and Phone.  
+- A doctor can have many appointments, but each appointment is with exactly one doctor.  
+- A patient can have many appointments, but each appointment is for exactly one patient.  
+- An appointment has: AppointmentID, Date, and Time.  
+
+### Cardinality and Participation
+- **Doctor–Appointment**:  
+  - Cardinality: 1:N (One doctor can have many appointments).  
+  - Participation: Total on Appointment (every appointment must be linked to a doctor), Partial on Doctor (a doctor may have zero appointments).  
+
+- **Patient–Appointment**:  
+  - Cardinality: 1:N (One patient can have many appointments).  
+  - Participation: Total on Appointment (every appointment must be linked to a patient), Partial on Patient (a patient may have zero appointments).  
+
+### Requirements
+1. Identify the entities.  
+2. Identify the attributes for each entity.  
+3. Define the relationships with cardinality and participation.  
+4. Draw the ERD diagram.  
+5. Map the ERD to relational schema.  
+6. Write SQL code in PostgreSQL to create the schema.  
+
+---
+
+## Solution 04: Hospital Management System
+
+### Entities and Attributes
+- **Doctor**
+  - DoctorID (Primary Key)  
+  - Name  
+  - Specialty  
+  - Phone  
+
+- **Patient**
+  - PatientID (Primary Key)  
+  - Name  
+  - Address  
+  - Phone  
+
+- **Appointment**
+  - AppointmentID (Primary Key)  
+  - Date  
+  - Time  
+  - DoctorID (Foreign Key)  
+  - PatientID (Foreign Key)  
+
+### Relationships
+- **Doctor–Appointment**: 1:N  
+- **Patient–Appointment**: 1:N  
+
+### ERD Diagram
+![Problem 4 Chen Solution](assets/Problem4ChenSolution.png)
+
+### ER-to-Relational Mapping
+- **Doctor(DoctorID, Name, Specialty, Phone)**  
+- **Patient(PatientID, Name, Address, Phone)**  
+- **Appointment(AppointmentID, Date, Time, DoctorID, PatientID)**  
+
+### PostgreSQL Implementation
+```sql
+-- Create Doctor table
+CREATE TABLE Doctor (
+    DoctorID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Specialty VARCHAR(100),
+    Phone VARCHAR(20) UNIQUE
+);
+
+-- Create Patient table
+CREATE TABLE Patient (
+    PatientID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Address VARCHAR(200),
+    Phone VARCHAR(20) UNIQUE
+);
+
+-- Create Appointment table
+CREATE TABLE Appointment (
+    AppointmentID SERIAL PRIMARY KEY,
+    Date DATE NOT NULL,
+    Time TIME NOT NULL,
+    DoctorID INT NOT NULL,
+    PatientID INT NOT NULL,
+    FOREIGN KEY (DoctorID) REFERENCES Doctor(DoctorID),
+    FOREIGN KEY (PatientID) REFERENCES Patient(PatientID)
+);
+```
