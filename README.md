@@ -477,3 +477,114 @@ CREATE TABLE OrderProduct (
     FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
 );
 ```
+
+---
+
+## Problem 06: University Course Enrollment System  
+
+### Description  
+A university needs to store information about students, courses, professors, enrollments, and grades.  
+You are asked to design an ERD for the following scenario:  
+
+- Each student has: StudentID, Name, Major, and Email.  
+- Each professor has: ProfessorID, Name, Department, and Office.  
+- Each course has: CourseID, CourseName, and Credits.  
+- A professor can teach many courses, but each course must be taught by exactly one professor.  
+- A student can enroll in many courses, and a course can have many students.  
+- For each enrollment, the system records the Semester and Year.  
+- Each enrollment must also store a Grade (e.g., A, B, C, etc.).  
+- A student may have multiple grades for the same course across different semesters.  
+- Each enrollment record is uniquely identified by the combination of StudentID, CourseID, and Semester-Year.  
+
+### Requirements  
+1. Identify the entities.  
+2. Identify the attributes for each entity.  
+3. Identify if there are any weak entities.  
+4. Define the relationships between entities (detect the cardinality and participation).  
+5. Draw the ERD diagram.  
+6. Map the ERD to relational schema.  
+7. Write SQL code in PostgreSQL to create the schema.  
+
+---
+
+## Solution 06: University Course Enrollment System  
+
+### Entities and Attributes  
+- **Student**  
+  - StudentID (Primary Key)  
+  - Name  
+  - Major  
+  - Email  
+
+- **Professor**  
+  - ProfessorID (Primary Key)  
+  - Name  
+  - Department  
+  - Office  
+
+- **Course**  
+  - CourseID (Primary Key)  
+  - CourseName  
+  - Credits  
+  - ProfessorID (Foreign Key)  
+
+- **Enrollment (Weak Entity)**  
+  - StudentID (Foreign Key)  
+  - CourseID (Foreign Key)  
+  - Semester  
+  - Year  
+  - Grade  
+  - (Primary Key = StudentID + CourseID + Semester + Year)  
+
+### Relationships  
+- **Professor–Course**: 1:N  
+- **Student–Course**: M:N (via Enrollment, with attributes Semester, Year, Grade)  
+
+### ERD Diagram  
+![Problem 6 Chen Solution](assets/Problem6ChenSolution.png)  
+
+### ER-to-Relational Mapping  
+- **Student(StudentID, Name, Major, Email)**  
+- **Professor(ProfessorID, Name, Department, Office)**  
+- **Course(CourseID, CourseName, Credits, ProfessorID)**  
+- **Enrollment(StudentID, CourseID, Semester, Year, Grade)**  
+
+### PostgreSQL Implementation  
+```sql
+-- Create Student table
+CREATE TABLE Student (
+    StudentID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Major VARCHAR(100),
+    Email VARCHAR(100) UNIQUE
+);
+
+-- Create Professor table
+CREATE TABLE Professor (
+    ProfessorID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Department VARCHAR(100),
+    Office VARCHAR(50)
+);
+
+-- Create Course table
+CREATE TABLE Course (
+    CourseID SERIAL PRIMARY KEY,
+    CourseName VARCHAR(100) NOT NULL,
+    Credits INT NOT NULL,
+    ProfessorID INT NOT NULL,
+    FOREIGN KEY (ProfessorID) REFERENCES Professor(ProfessorID)
+);
+
+-- Create Enrollment table (Weak Entity for M:N relationship with attributes)
+CREATE TABLE Enrollment (
+    StudentID INT NOT NULL,
+    CourseID INT NOT NULL,
+    Semester VARCHAR(20) NOT NULL,
+    Year INT NOT NULL,
+    Grade CHAR(2),
+    PRIMARY KEY (StudentID, CourseID, Semester, Year),
+    FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+);
+```
