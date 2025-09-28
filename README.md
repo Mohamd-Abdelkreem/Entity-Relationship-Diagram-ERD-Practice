@@ -11,6 +11,18 @@ This repository is built to help you learn database design by practice.
 - [How to Use](#how-to-use)  
 - [Problem 01: Company Employees and Departments](#problem-01-company-employees-and-departments)  
 - [Solution 01: Company Employees and Departments](#solution-01-company-employees-and-departments)  
+- [Problem 02: Library Books and Members](#problem-02-library-books-and-members)  
+- [Solution 02: Library Books and Members](#solution-02-library-books-and-members)  
+- [Problem 03: Students, Courses, and Enrollments](#problem-03-students-courses-and-enrollments)  
+- [Solution 03: Students, Courses, and Enrollments](#solution-03-students-courses-and-enrollments)  
+- [Problem 04: Hospital Management System](#problem-04-hospital-management-system)  
+- [Solution 04: Hospital Management System](#solution-04-hospital-management-system)  
+- [Problem 05: Online Shopping System](#problem-05-online-shopping-system)  
+- [Solution 05: Online Shopping System](#solution-05-online-shopping-system)  
+- [Problem 06: University Course Enrollment System](#problem-06-university-course-enrollment-system)  
+- [Solution 06: University Course Enrollment System](#solution-06-university-course-enrollment-system)  
+- [Problem 07: Project Management System](#problem-07-project-management-system)  
+- [Solution 07: Project Management System](#solution-07-project-management-system)  
 
 ---
 
@@ -265,7 +277,6 @@ CREATE TABLE Enrollment (
 
 ## Problem 04: Hospital Management System
 
-
 ### Description
 A hospital wants to manage data about doctors, patients, and appointments.  
 You are asked to design an ERD for the following scenario:
@@ -286,7 +297,6 @@ You are asked to design an ERD for the following scenario:
 6. Write SQL code in PostgreSQL to create the schema.  
 
 ---
-
 
 ## Solution 04: Hospital Management System
 
@@ -585,7 +595,7 @@ CREATE TABLE Enrollment (
     Grade CHAR(2),
     PRIMARY KEY (StudentID, CourseID, Semester, Year),
     FOREIGN KEY (StudentID) REFERENCES Student(StudentID),
-    FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+    FOREIGN KEY (CourseID) REFERENCES Course.CourseID
 );
 ```
 ---
@@ -596,92 +606,91 @@ CREATE TABLE Enrollment (
 A software company needs a system to manage its projects, tasks, and employees. The system must track project details, task assignments, team compositions, and task dependencies.
 You are asked to design an ERD for the following scenario:
 
--   The system manages multiple **Projects**. Each project has a ProjectID, Name, StartDate, EndDate, and Budget.
--   Each project is composed of multiple **Tasks**. Each task has a TaskID, Description, DueDate, Status (e.g., 'To Do', 'In Progress', 'Done'), and Priority (e.g., 'High', 'Medium', 'Low'). A task must belong to exactly one project.
--   Tasks can have dependencies. A task can be a prerequisite for one or more other tasks. This creates a self-referencing relationship on the Task entity.
--   The company has **Employees**. Each employee has an EmployeeID, Name, Email, and JobTitle.
--   Employees are organized into **Teams**. Each team has a TeamID and a TeamName. An employee can belong to only one team at a time, but a team consists of many employees.
--   Tasks are assigned to employees. An employee can be assigned many tasks, and a task can be assigned to multiple employees (a joint task). For each assignment, the system should record the date of assignment.
--   The system also needs to track **TimeLogs**. An employee can log time spent on a specific task. Each time log entry should have a LogID, HoursWorked, and the date the work was performed.
+- The system manages multiple **Projects**. Each project has a ProjectID, Name, StartDate, EndDate, and Budget.
+- Each project is composed of multiple **Tasks**. Each task has a TaskID, Description, DueDate, Status (e.g., 'To Do', 'In Progress', 'Done'), and Priority (e.g., 'High', 'Medium', 'Low'). A task must belong to exactly one project.
+- Tasks can have dependencies. A task can be a prerequisite for one or more other tasks. This creates a self-referencing relationship on the Task entity.
+- The company has **Employees**. Each employee has an EmployeeID, Name, Email, and JobTitle.
+- Employees are organized into **Teams**. Each team has a TeamID and a TeamName. An employee can belong to only one team at a time, but a team consists of many employees.
+- Tasks are assigned to employees. An employee can be assigned many tasks, and a task can be assigned to multiple employees (a joint task). For each assignment, the system should record the date of assignment.
+- The system also needs to track **TimeLogs**. An employee can log time spent on a specific task. Each time log entry should have a LogID, HoursWorked, and the date the work was performed.
 
 ### Requirements
-1.  Identify all the entities.
-2.  Identify the attributes for each entity, including primary and foreign keys.
-3.  Identify any weak entities.
-4.  Define the relationships between entities (detect the cardinality and participation).
-5.  Represent any self-referencing (recursive) relationships.
-6.  Draw the ERD diagram.
-7.  Map the ERD to a relational schema.
-8.  Write SQL code in PostgreSQL to create the schema.
+1. Identify all the entities.
+2. Identify the attributes for each entity, including primary and foreign keys.
+3. Identify any weak entities.
+4. Define the relationships between entities (detect the cardinality and participation).
+5. Represent any self-referencing (recursive) relationships.
+6. Draw the ERD diagram.
+7. Map the ERD to a relational schema.
+8. Write SQL code in PostgreSQL to create the schema.
 
 ---
 
 ## Solution 07: Project Management System
 
 ### Entities and Attributes
--   **Project**
-    -   ProjectID (Primary Key)
-    -   Name
-    -   StartDate
-    -   EndDate
-    -   Budget
+- **Project**
+  - ProjectID (Primary Key)
+  - Name
+  - StartDate
+  - EndDate
+  - Budget
 
--   **Task**
-    -   TaskID (Primary Key)
-    -   Description
-    -   DueDate
-    -   Status
-    -   Priority
-    -   ProjectID (Foreign Key)
+- **Task**
+  - TaskID (Primary Key)
+  - Description
+  - DueDate
+  - Status
+  - Priority
+  - ProjectID (Foreign Key)
 
--   **TaskDependency (Associative Entity for Task's recursive relationship)**
-    -   PrerequisiteTaskID (Foreign Key)
-    -   DependentTaskID (Foreign Key)
-    -   PRIMARY KEY (PrerequisiteTaskID, DependentTaskID)
+- **TaskDependency (Associative Entity for Task's recursive relationship)**
+  - PrerequisiteTaskID (Foreign Key)
+  - DependentTaskID (Foreign Key)
+  - PRIMARY KEY (PrerequisiteTaskID, DependentTaskID)
 
--   **Employee**
-    -   EmployeeID (Primary Key)
-    -   Name
-    -   Email
-    -   JobTitle
-    -   TeamID (Foreign Key)
+- **Employee**
+  - EmployeeID (Primary Key)
+  - Name
+  - Email
+  - JobTitle
+  - TeamID (Foreign Key)
 
--   **Team**
-    -   TeamID (Primary Key)
-    -   TeamName
+- **Team**
+  - TeamID (Primary Key)
+  - TeamName
 
--   **TaskAssignment (Associative Entity for Employee-Task)**
-    -   EmployeeID (Foreign Key)
-    -   TaskID (Foreign Key)
-    -   AssignmentDate
-    -   PRIMARY KEY (EmployeeID, TaskID)
+- **TaskAssignment (Associative Entity for Employee-Task)**
+  - EmployeeID (Foreign Key)
+  - TaskID (Foreign Key)
+  - AssignmentDate
+  - PRIMARY KEY (EmployeeID, TaskID)
 
--   **TimeLog**
-    -   LogID (Primary Key)
-    -   HoursWorked
-    -   LogDate
-    -   EmployeeID (Foreign Key)
-    -   TaskID (Foreign Key)
+- **TimeLog**
+  - LogID (Primary Key)
+  - HoursWorked
+  - LogDate
+  - EmployeeID (Foreign Key)
+  - TaskID (Foreign Key)
 
 ### Relationships
--   **Project–Task**: 1:N (One Project has many Tasks). A Task must belong to exactly one Project.
--   **Team–Employee**: 1:N (One Team has many Employees). An Employee belongs to one Team.
--   **Task–Task (Dependency)**: M:N (A Task can have many prerequisite tasks, and can be a prerequisite for many other tasks). This is a recursive relationship modeled with the `TaskDependency` associative entity.
--   **Employee–Task (Assignment)**: M:N (An Employee can be assigned many Tasks, and a Task can be assigned to many Employees). Modeled with the `TaskAssignment` associative entity.
--   **Employee–Task (Time Logging)**: The `TimeLog` entity connects an Employee and a Task, representing a many-to-one relationship from `TimeLog` to both `Employee` and `Task`. An employee logs time for a specific task.
+- **Project–Task**: 1:N (One Project has many Tasks). A Task must belong to exactly one Project.
+- **Team–Employee**: 1:N (One Team has many Employees). An Employee belongs to one Team.
+- **Task–Task (Dependency)**: M:N (A Task can have many prerequisite tasks, and can be a prerequisite for many other tasks). This is a recursive relationship modeled with the `TaskDependency` associative entity.
+- **Employee–Task (Assignment)**: M:N (An Employee can be assigned many Tasks, and a Task can be assigned to many Employees). Modeled with the `TaskAssignment` associative entity.
+- **Employee–Task (Time Logging)**: The `TimeLog` entity connects an Employee and a Task, representing a many-to-one relationship from `TimeLog` to both `Employee` and `Task`. An employee logs time for a specific task.
 
 ### ERD Diagram
-*(A diagram would be drawn here showing the entities and relationships as described)*
 ![Problem 7 Chen Solution](assets/Problem_7_Chen_Solution.png)
 
 ### ER-to-Relational Mapping
--   **Project(<u>ProjectID</u>, Name, StartDate, EndDate, Budget)**
--   **Team(<u>TeamID</u>, TeamName)**
--   **Employee(<u>EmployeeID</u>, Name, Email, JobTitle, *TeamID*)**
--   **Task(<u>TaskID</u>, Description, DueDate, Status, Priority, *ProjectID*)**
--   **TaskDependency(<u>*PrerequisiteTaskID*</u>, <u>*DependentTaskID*</u>)**
--   **TaskAssignment(<u>*EmployeeID*</u>, <u>*TaskID*</u>, AssignmentDate)**
--   **TimeLog(<u>LogID</u>, HoursWorked, LogDate, *EmployeeID*, *TaskID*)**
+- **Project(<u>ProjectID</u>, Name, StartDate, EndDate, Budget)**
+- **Team(<u>TeamID</u>, TeamName)**
+- **Employee(<u>EmployeeID</u>, Name, Email, JobTitle, *TeamID*)**
+- **Task(<u>TaskID</u>, Description, DueDate, Status, Priority, *ProjectID*)**
+- **TaskDependency(<u>*PrerequisiteTaskID*</u>, <u>*DependentTaskID*</u>)**
+- **TaskAssignment(<u>*EmployeeID*</u>, <u>*TaskID*</u>, AssignmentDate)**
+- **TimeLog(<u>LogID</u>, HoursWorked, LogDate, *EmployeeID*, *TaskID*)**
 
 ### PostgreSQL Implementation
 ```sql
@@ -752,3 +761,5 @@ CREATE TABLE TimeLog (
     FOREIGN KEY (TaskID) REFERENCES Task(TaskID) ON DELETE CASCADE
 );
 ```
+
+---
