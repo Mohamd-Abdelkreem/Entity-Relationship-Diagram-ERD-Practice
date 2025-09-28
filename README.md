@@ -588,3 +588,175 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 ```
+---
+
+## Problem 07: Library Management System  
+
+### Description  
+A library needs to manage data about members, books, authors, staff, borrowings, and fines.  
+You are asked to design an ERD for the following scenario:  
+
+- Each member has: MemberID, Name, Email, and Address.  
+- Each author has: AuthorID, Name, and Nationality.  
+- Each book has: BookID, Title, ISBN, and PublicationYear.  
+- A book can be written by one or more authors, and an author can write many books.  
+- Each member can borrow many books, and each book can be borrowed by many members over time. For each borrowing, the system stores BorrowDate and ReturnDate.  
+- If a member returns a book late, a fine is issued. Each fine has: FineID, Amount, and PaymentStatus. A fine must be linked to exactly one borrowing.  
+- The library also employs staff. Each staff member has: StaffID, Name, and HireDate.  
+- Staff are divided into two categories (specialization):  
+  - **Librarian**: manages borrowing and fines. (Attributes: LibrarianID, Shift)  
+  - **Technician**: maintains books. (Attributes: TechnicianID, Expertise)  
+
+### Requirements  
+1. Identify the entities.  
+2. Identify the attributes for each entity.  
+3. Identify any weak entities.  
+4. Define the relationships between entities (detect the cardinality and participation).  
+5. Represent the specialization/generalization.  
+6. Draw the ERD diagram.  
+7. Map the ERD to relational schema.  
+8. Write SQL code in PostgreSQL to create the schema.  
+
+---
+
+## Solution 07: Library Management System  
+
+### Entities and Attributes  
+- **Member**  
+  - MemberID (Primary Key)  
+  - Name  
+  - Email  
+  - Address  
+
+- **Author**  
+  - AuthorID (Primary Key)  
+  - Name  
+  - Nationality  
+
+- **Book**  
+  - BookID (Primary Key)  
+  - Title  
+  - ISBN  
+  - PublicationYear  
+
+- **Borrowing (Weak Entity)**  
+  - BorrowID (Primary Key)  
+  - BorrowDate  
+  - ReturnDate  
+  - MemberID (Foreign Key)  
+  - BookID (Foreign Key)  
+
+- **Fine**  
+  - FineID (Primary Key)  
+  - Amount  
+  - PaymentStatus  
+  - BorrowID (Foreign Key, Unique)  
+
+- **Staff (Superclass)**  
+  - StaffID (Primary Key)  
+  - Name  
+  - HireDate  
+
+- **Librarian (Subclass of Staff)**  
+  - StaffID (Primary Key, Foreign Key)  
+  - Shift  
+
+- **Technician (Subclass of Staff)**  
+  - StaffID (Primary Key, Foreign Key)  
+  - Expertise  
+
+### Relationships  
+- **Book–Author**: M:N  
+- **Member–Borrowing–Book**: M:N (Borrowing is weak entity with attributes BorrowDate, ReturnDate)  
+- **Borrowing–Fine**: 1:1 (each borrowing can have at most one fine)  
+- **Staff Specialization**: Staff ISA Librarian, Staff ISA Technician  
+
+### ERD Diagram  
+![Problem 7 Chen Solution](assets/Problem7ChenSolution.png)  
+
+### ER-to-Relational Mapping  
+- **Member(MemberID, Name, Email, Address)**  
+- **Author(AuthorID, Name, Nationality)**  
+- **Book(BookID, Title, ISBN, PublicationYear)**  
+- **BookAuthor(BookID, AuthorID)**  
+- **Borrowing(BorrowID, BorrowDate, ReturnDate, MemberID, BookID)**  
+- **Fine(FineID, Amount, PaymentStatus, BorrowID)**  
+- **Staff(StaffID, Name, HireDate)**  
+- **Librarian(StaffID, Shift)**  
+- **Technician(StaffID, Expertise)**  
+
+### PostgreSQL Implementation  
+```sql
+-- Create Member table
+CREATE TABLE Member (
+    MemberID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Address VARCHAR(200)
+);
+
+-- Create Author table
+CREATE TABLE Author (
+    AuthorID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Nationality VARCHAR(50)
+);
+
+-- Create Book table
+CREATE TABLE Book (
+    BookID SERIAL PRIMARY KEY,
+    Title VARCHAR(200) NOT NULL,
+    ISBN VARCHAR(20) UNIQUE,
+    PublicationYear INT
+);
+
+-- Create BookAuthor (M:N)
+CREATE TABLE BookAuthor (
+    BookID INT NOT NULL,
+    AuthorID INT NOT NULL,
+    PRIMARY KEY (BookID, AuthorID),
+    FOREIGN KEY (BookID) REFERENCES Book(BookID),
+    FOREIGN KEY (AuthorID) REFERENCES Author(AuthorID)
+);
+
+-- Create Borrowing table (Weak Entity)
+CREATE TABLE Borrowing (
+    BorrowID SERIAL PRIMARY KEY,
+    BorrowDate DATE NOT NULL,
+    ReturnDate DATE,
+    MemberID INT NOT NULL,
+    BookID INT NOT NULL,
+    FOREIGN KEY (MemberID) REFERENCES Member(MemberID),
+    FOREIGN KEY (BookID) REFERENCES Book(BookID)
+);
+
+-- Create Fine table (1:1 with Borrowing)
+CREATE TABLE Fine (
+    FineID SERIAL PRIMARY KEY,
+    Amount DECIMAL(10,2) NOT NULL,
+    PaymentStatus VARCHAR(20) NOT NULL,
+    BorrowID INT UNIQUE NOT NULL,
+    FOREIGN KEY (BorrowID) REFERENCES Borrowing(BorrowID)
+);
+
+-- Create Staff table (Superclass)
+CREATE TABLE Staff (
+    StaffID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    HireDate DATE NOT NULL
+);
+
+-- Create Librarian table (Subclass of Staff)
+CREATE TABLE Librarian (
+    StaffID INT PRIMARY KEY,
+    Shift VARCHAR(50),
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
+-- Create Technician table (Subclass of Staff)
+CREATE TABLE Technician (
+    StaffID INT PRIMARY KEY,
+    Expertise VARCHAR(100),
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+```
