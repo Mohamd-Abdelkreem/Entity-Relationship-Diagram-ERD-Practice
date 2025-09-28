@@ -351,3 +351,129 @@ CREATE TABLE Appointment (
     FOREIGN KEY (PatientID) REFERENCES Patient(PatientID)
 );
 ```
+---
+
+## Problem 05: Online Shopping System  
+
+### Description  
+An online shopping platform wants to store information about customers, products, orders, and payments.  
+You are asked to design an ERD for the following scenario:  
+
+- Each customer has: CustomerID, Name, Email, and Phone Numbers (a customer can have multiple phone numbers).  
+- Each product has: ProductID, ProductName, Price, and StockQuantity.  
+- A customer can place many orders, but each order must belong to exactly one customer.  
+- An order can include many products, and a product can appear in many orders. For each product in an order, the system stores the Quantity purchased.  
+- Each order has: OrderID and OrderDate.  
+- Each order must have one payment, and a payment must be linked to exactly one order.  
+- A payment has: PaymentID, PaymentDate, and Amount.  
+
+### Requirements  
+1. Identify the entities.  
+2. Identify the attributes for each entity.  
+3. Identify any multi-valued attributes.  
+4. Define the relationships between entities (detect the cardinality and participation).  
+5. Draw the ERD diagram.  
+6. Map the ERD to relational schema.  
+7. Write SQL code in PostgreSQL to create the schema.  
+
+---
+
+## Solution 05: Online Shopping System  
+
+### Entities and Attributes  
+- **Customer**  
+  - CustomerID (Primary Key)  
+  - Name  
+  - Email  
+  - PhoneNumbers (Multi-valued)  
+
+- **Product**  
+  - ProductID (Primary Key)  
+  - ProductName  
+  - Price  
+  - StockQuantity  
+
+- **Order**  
+  - OrderID (Primary Key)  
+  - OrderDate  
+  - CustomerID (Foreign Key)  
+
+- **Payment**  
+  - PaymentID (Primary Key)  
+  - PaymentDate  
+  - Amount  
+  - OrderID (Foreign Key, Unique)  
+
+- **OrderProduct (Associative Entity for M:N)**  
+  - OrderID (Foreign Key)  
+  - ProductID (Foreign Key)  
+  - Quantity  
+
+### Relationships  
+- **Customer–Order**: 1:N  
+- **Order–Product**: M:N (with Quantity attribute)  
+- **Order–Payment**: 1:1  
+
+### ERD Diagram  
+![Problem 5 Chen Solution](assets/Problem5ChenSolution.png)  
+
+### ER-to-Relational Mapping  
+- **Customer(CustomerID, Name, Email)**  
+- **CustomerPhone(CustomerID, PhoneNumber)**  
+- **Product(ProductID, ProductName, Price, StockQuantity)**  
+- **Order(OrderID, OrderDate, CustomerID)**  
+- **Payment(PaymentID, PaymentDate, Amount, OrderID)**  
+- **OrderProduct(OrderID, ProductID, Quantity)**  
+
+### PostgreSQL Implementation  
+```sql
+-- Create Customer table
+CREATE TABLE Customer (
+    CustomerID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Create CustomerPhone table (multi-valued attribute)
+CREATE TABLE CustomerPhone (
+    CustomerID INT NOT NULL,
+    PhoneNumber VARCHAR(20) NOT NULL,
+    PRIMARY KEY (CustomerID, PhoneNumber),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+
+-- Create Product table
+CREATE TABLE Product (
+    ProductID SERIAL PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    StockQuantity INT NOT NULL
+);
+
+-- Create Order table
+CREATE TABLE Orders (
+    OrderID SERIAL PRIMARY KEY,
+    OrderDate DATE NOT NULL,
+    CustomerID INT NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+
+-- Create Payment table (1:1 with Orders)
+CREATE TABLE Payment (
+    PaymentID SERIAL PRIMARY KEY,
+    PaymentDate DATE NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL,
+    OrderID INT UNIQUE NOT NULL,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+-- Create OrderProduct table (M:N relationship)
+CREATE TABLE OrderProduct (
+    OrderID INT NOT NULL,
+    ProductID INT NOT NULL,
+    Quantity INT NOT NULL,
+    PRIMARY KEY (OrderID, ProductID),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
+```
