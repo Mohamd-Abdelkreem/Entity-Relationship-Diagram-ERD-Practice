@@ -80,7 +80,7 @@ You are asked to design an ERD for the following scenario:
 - **Manages**: Each department has one manager (1:1 between Department and Employee).  
 
 ### ERD Diagram
-![Problem 1 Chen Solution](assets/Problem1ChenSolution.png)
+![Problem 1 Chen Solution](assets/Problem 1 Chen Solution.png)
 
 ### ER-to-Relational Mapping
 - **Employee(SSN, FirstName, LastName, BirthDate, Gender, DeptNo)**  
@@ -151,7 +151,7 @@ You are asked to design an ERD for the following scenario:
 - Each book is borrowed by at most one member.  
 
 ### ERD Diagram
-![Problem 2 Chen Solution](assets/Problem2ChenSolution.png)
+![Problem 2 Chen Solution](assets/Problem 2 Chen Solution.png)
 
 ### ER-to-Relational Mapping
 - **Book(ISBN, Title, Author, PubYear, MemberID)**  
@@ -227,7 +227,7 @@ You are asked to design an ERD for the following scenario:
   - This is a **many-to-many (M:N)** relationship, resolved with the **Enrollment** table.  
 
 ### ERD Diagram
-![Problem 3 Chen Solution](assets/Problem3ChenSolution.png)
+![Problem 3 Chen Solution](assets/Problem 3 Chen Solution.png)
 
 ### ER-to-Relational Mapping
 - **Student(StudentID, Name, Major, Email)**  
@@ -315,7 +315,7 @@ You are asked to design an ERD for the following scenario:
 - **Patient–Appointment**: 1:N  
 
 ### ERD Diagram
-![Problem 4 Chen Solution](assets/Problem4ChenSolution.png)
+![Problem 4 Chen Solution](assets/Problem 4 Chen Solution.png)
 
 ### ER-to-Relational Mapping
 - **Doctor(DoctorID, Name, Specialty, Phone)**  
@@ -415,7 +415,7 @@ You are asked to design an ERD for the following scenario:
 - **Order–Payment**: 1:1  
 
 ### ERD Diagram  
-![Problem 5 Chen Solution](assets/Problem5ChenSolution.png)  
+![Problem 5 Chen Solution](assets/Problem 5 Chen Solution.png)
 
 ### ER-to-Relational Mapping  
 - **Customer(CustomerID, Name, Email)**  
@@ -541,7 +541,7 @@ You are asked to design an ERD for the following scenario:
 - **Student–Course**: M:N (via Enrollment, with attributes Semester, Year, Grade)  
 
 ### ERD Diagram  
-![Problem 6 Chen Solution](assets/Problem6ChenSolution.png)  
+![Problem 6 Chen Solution](assets/Problem 6 Chen Solution.png)
 
 ### ER-to-Relational Mapping  
 - **Student(StudentID, Name, Major, Email)**  
@@ -672,7 +672,7 @@ You are asked to design an ERD for the following scenario:
 
 ### ERD Diagram
 *(A diagram would be drawn here showing the entities and relationships as described)*
-![Problem 8 Chen Solution](assets/Problem8ChenSolution.png)
+![Problem 7 Chen Solution](assets/Problem 7 Chen Solution.png)
 
 ### ER-to-Relational Mapping
 -   **Project(<u>ProjectID</u>, Name, StartDate, EndDate, Budget)**
