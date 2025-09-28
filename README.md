@@ -107,3 +107,72 @@ CREATE TABLE Employee (
     FOREIGN KEY (DeptNo) REFERENCES Department(DeptNo),
     CONSTRAINT fk_manager FOREIGN KEY (SSN) REFERENCES Department(ManagerSSN)
 );
+```
+
+---
+
+## Problem 02: Library Books and Members
+
+### Description
+A small library wants to store information about its books and members.  
+You are asked to design an ERD for the following scenario:
+
+- Each book has: ISBN, Title, Author, and Publication Year.  
+- Each member has: Member ID, Name, and Email.  
+- A member can borrow many books.  
+- A book can only be borrowed by one member at a time.  
+
+### Requirements
+1. Identify the entities.  
+2. Identify the attributes for each entity.  
+3. Define the relationships between entities.  
+4. Draw the ERD diagram.  
+5. Map the ERD to relational schema.  
+6. Write SQL code in PostgreSQL to create the schema.  
+
+---
+
+## Solution 02: Library Books and Members
+
+### Entities and Attributes
+- **Book**
+  - ISBN (Primary Key)  
+  - Title  
+  - Author  
+  - PubYear  
+
+- **Member**
+  - MemberID (Primary Key)  
+  - Name  
+  - Email  
+
+### Relationships
+- **Borrows**: A member can borrow many books (1:N).  
+- Each book is borrowed by at most one member.  
+
+### ERD Diagram
+![Problem 2 Chen Solution](assets/Problem2ChenSolution.png)
+
+### ER-to-Relational Mapping
+- **Book(ISBN, Title, Author, PubYear, MemberID)**  
+- **Member(MemberID, Name, Email)**  
+
+### PostgreSQL Implementation
+```sql
+-- Create Member table
+CREATE TABLE Member (
+    MemberID SERIAL PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Create Book table
+CREATE TABLE Book (
+    ISBN CHAR(13) PRIMARY KEY,
+    Title VARCHAR(200) NOT NULL,
+    Author VARCHAR(100) NOT NULL,
+    PubYear INT,
+    MemberID INT,
+    FOREIGN KEY (MemberID) REFERENCES Member(MemberID)
+);
+```
