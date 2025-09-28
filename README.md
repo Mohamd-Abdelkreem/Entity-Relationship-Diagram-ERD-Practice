@@ -80,7 +80,7 @@ You are asked to design an ERD for the following scenario:
 - **Manages**: Each department has one manager (1:1 between Department and Employee).  
 
 ### ERD Diagram
-![Solution 01 ERD]([Problem1ChenSolution.png](https://github.com/Mohamd-Abdelkreem/Entity-Relationship-Diagram-ERD-Practice/blob/main/Problem1ChenSolution.png))
+![Problem 1 Chen Solution](assets/Problem1ChenSolution.png)
 
 ### ER-to-Relational Mapping
 - **Employee(SSN, FirstName, LastName, BirthDate, Gender, DeptNo)**  
