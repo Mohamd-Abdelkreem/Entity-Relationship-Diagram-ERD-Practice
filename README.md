@@ -9,6 +9,7 @@ This repository is built to help you learn database design by practice.
 - [Purpose](#purpose)  
 - [Who is this for?](#who-is-this-for)  
 - [How to Use](#how-to-use)  
+- [Datebase Design Instructions: Converting User Stories to ERD Graphical Representation](#instructions-converting-user-stories-to-erd-graphical-representation)
 - [Database Design Instructions: ERD to Relational Schema](#database-design-instructions-erd-to-relational-schema)
 - [Problem 01: Company Employees and Departments](#problem-01-company-employees-and-departments)  
 - [Solution 01: Company Employees and Departments](#solution-01-company-employees-and-departments)  
@@ -49,6 +50,147 @@ All problems and solutions are included directly in this README.
 2. Try to solve it on your own by identifying entities, attributes, and relationships.  
 3. Draw your own ERD diagram and Schema (Mapping).  
 4. Scroll down to the matching **Solution** section to compare with the provided answer.  
+
+---
+
+## Database Design Instructions: Converting User Stories to ERD Graphical Representation
+
+Use this guide before mapping to relational schema—start from user stories and build a correct conceptual model (ERD).
+
+### Step 1: Identify Entities from User Stories
+
+#### How to Find Entities:
+- Look for **nouns** in the user stories (people, places, things, concepts)
+- Common entities: User, Product, Order, Account, Post, Comment, Category
+- Each entity becomes a **rectangle** in your ERD
+
+#### Action Steps:
+1. List all nouns from your user stories  
+2. Filter out non-entities (actions, temporary data, UI terms)  
+3. Create an entity box for each relevant noun  
+4. Add attributes inside each entity box  
+
+#### Example:
+User Story: "As a user, I want to create posts with images so I can share content"  
+- Entities: `User`, `Post`, `Image`
+
+---
+
+### Step 2: Identify Relationships from User Stories
+
+#### How to Find Relationships:
+- Look for **verbs** connecting entities
+- Common verbs: creates, owns, belongs to, has, contains, assigns, likes, comments on
+- Each relationship becomes a **diamond** in a traditional Chen ERD (or a labeled line in crow's foot)
+
+#### Action Steps:
+1. Identify verb phrases between entities  
+2. Determine cardinality (1:1, 1:N, M:N)  
+3. Draw relationship lines with diamonds (Chen) / crow’s foot notation  
+4. Label relationships clearly (active voice if possible)  
+
+#### Cardinality Indicators:
+- **1:1**: each A has exactly one B  
+- **1:N**: one A has many B's, each B belongs to one A  
+- **M:N**: many A's relate to many B's  
+
+#### Examples:
+- "A User creates many Posts" → 1:N  
+- "A Post can have many Images" → 1:N  
+- "Users can like many Posts" → M:N  
+
+---
+
+### Step 3: Determine Attributes for Each Entity
+
+#### How to Find Attributes:
+- Look for descriptive details in stories
+- Examples: name, email, created_at, status, price
+
+#### Action Steps:
+1. List properties describing each entity  
+2. Choose primary keys (underline them in ERD)  
+3. Mark composite attributes (e.g., Name → (FirstName, LastName))  
+4. Identify multivalued (e.g., phone_numbers) and derived (e.g., age) attributes  
+
+#### Attribute Types:
+- Simple (email)  
+- Composite (name → first_name, last_name)  
+- Multivalued (tags, phone_numbers)  
+- Derived (age from birth_date)  
+
+---
+
+### Step 4: Handle Different Relationship Types Graphically
+
+#### 1:1 (One-to-One)
+[Entity A] ——(1)—〈relationship〉—(1)— [Entity B]  
+- Use when each side matches at most one on the other side  
+
+#### 1:N (One-to-Many)
+[Entity A] ——(1)—〈relationship〉—(N)— [Entity B]  
+- A on the 1 side, B on the many side  
+
+#### M:N (Many-to-Many)
+[Entity A] ——(M)—〈relationship〉—(N)— [Entity B]  
+- Requires resolution to associative entity when mapping to schema  
+
+---
+
+### Step 5: Identify Relationship Attributes
+
+Add attributes to the relationship when they describe the connection itself (not either entity alone).
+
+#### Examples:
+- Like(timestamp)  
+- Enrollment(grade, semester)  
+- OrderProduct(quantity, unit_price)
+
+#### Action Steps:
+1. Ask: Does this value belong to one entity alone? If no → relationship attribute  
+2. For M:N: Will become columns in the junction (associative) table  
+3. For 1:N with attributes on relationship: Often becomes part of dependent entity (if optional, consider separate table)  
+
+---
+
+### Practical Example from User Stories
+
+#### User Stories:
+1. "As a user, I want to create posts with content and images"  
+2. "As a user, I want to like other users' posts"  
+3. "As a user, I want to comment on posts"  
+
+#### ERD Components:
+
+Entities:
+
+User (user_id, name, email, bdate)  
+Post (post_id, content, timestamp, author_id → User)  
+PostImage (post_id, url)  
+Like (user_id → User, post_id → Post, timestamp)  
+Comment (comment_id, user_id → User, post_id → Post, content, timestamp)  
+
+Relationships:
+
+User -(creates 1:N)-> Post  
+Post -(has 1:N)-> PostImage  
+User -(likes M:N)-> Post (with timestamp attribute)  
+User -(comments 1:N)-> Post  
+
+---
+
+### Quick Reference
+
+- Extract all nouns → Entities  
+- Extract all verbs → Relationships  
+- Determine cardinality (1:1, 1:N, M:N)  
+- Identify primary keys for each entity  
+- List all attributes for each entity  
+- Identify relationship attributes  
+- Draw entities as rectangles  
+- Draw relationships as diamonds (Chen) or labeled edges (crow’s foot)  
+- Connect with appropriate cardinality notation  
+- Review for completeness and accuracy  
 
 ---
 
@@ -149,7 +291,6 @@ You are asked to design an ERD for the following scenario:
 
 ### ERD Diagram
 ![Problem 1 Chen Solution](assets/Problem_1_Chen_Solution.png)
-
 
 ### ER-to-Relational Mapping
 - **Employee(SSN, FirstName, LastName, BirthDate, Gender, DeptNo)**  
@@ -398,7 +539,6 @@ You are asked to design an ERD for the following scenario:
   
 ![Problem 4 Schema Solution](assets/ERD_To_Schema_P4.png)
 
-
 ### PostgreSQL Implementation
 ```sql
 -- Create Doctor table
@@ -631,7 +771,6 @@ You are asked to design an ERD for the following scenario:
   
 ![Problem 6 Schema Solution](assets/ERD_To_Schema_P6.png)
 
-
 ### PostgreSQL Implementation  
 ```sql
 -- Create Student table
@@ -767,7 +906,6 @@ You are asked to design an ERD for the following scenario:
 - **TimeLog(<u>LogID</u>, HoursWorked, LogDate, *EmployeeID*, *TaskID*)**
   
 ![Problem 7 Schema Solution](assets/ERD_To_Schema_P7.png)
-
 
 ### PostgreSQL Implementation
 ```sql
