@@ -9,6 +9,7 @@ This repository is built to help you learn database design by practice.
 - [Purpose](#purpose)  
 - [Who is this for?](#who-is-this-for)  
 - [How to Use](#how-to-use)  
+- [Database Design Instructions: ERD to Relational Schema](#database-design-instructions-erd-to-relational-schema)
 - [Problem 01: Company Employees and Departments](#problem-01-company-employees-and-departments)  
 - [Solution 01: Company Employees and Departments](#solution-01-company-employees-and-departments)  
 - [Problem 02: Library Books and Members](#problem-02-library-books-and-members)  
@@ -47,6 +48,60 @@ All problems and solutions are included directly in this README.
 2. Try to solve it on your own by identifying entities, attributes, and relationships.  
 3. Draw your own ERD diagram.  
 4. Scroll down to the matching **Solution** section to compare with the provided answer.  
+
+---
+
+## Database Design Instructions: ERD to Relational Schema
+
+This section outlines the step-by-step process for converting an Entity-Relationship Diagram (ERD) into a relational database schema. Use it as a general guide when solving the problems in this repository.
+
+### Step 1: Identify and Create Entity Tables
+
+- Rule: Each entity type in your diagram becomes its own table.
+- Action:
+  1. Create a table for the entity.
+  2. Convert the entity's attributes into columns in that table.
+  3. Choose a Primary Key:
+     - It can be a Simple (single column) or Composite (multiple columns) key.
+     - It must be Not Null, Unique, and Minimal (no unnecessary columns).
+
+Example: Create tables for `User`, `Post`, `PostImage`, `Like`, and `Comment`.
+
+### Step 2: Handle 1:1 (One-to-One) Relationships
+
+This depends on the participation constraint (Total or Partial) of the entities involved.
+
+| Participation (S, T) | What to do? | Where to put Relationship Attributes? |
+|----------------------|------------|---------------------------------------|
+| Both Total (S: Total, T: Total) | Merge the two tables `S` and `T` into a single table. | Add them as columns in the merged table. |
+| One Partial, One Total (S: Partial, T: Total) | Add a Foreign Key to the table with Total participation (`T`) that references the Primary Key of the other table (`S`). This FK can also become the PK of `T`. | Add them as columns to the table with the Foreign Key (`T`). |
+| Both Partial (S: Partial, T: Partial) | Add a Foreign Key to either table `S` or `T` referencing the Primary Key of the other. | Add them as columns to the table you placed the Foreign Key in. |
+
+### Step 3: Handle 1:N (One-to-Many) Relationships
+
+- Identify the sides: which entity is on the "1" side (`T`) and which is on the "N" side (`S`).
+- Action:
+  1. Add a Foreign Key in the table on the "N" side (`S`) that refers to the Primary Key of the "1" side (`T`).
+  2. Place any attributes of the relationship into the "N" side table.
+
+Example: A User authors a Post (1:N). Add `author_id` in the `Post` table referencing `User(user_id)`.
+
+### Step 4: Handle M:N (Many-to-Many) Relationships
+
+- Action:
+  1. Create a new table `R` to represent the relationship.
+  2. Add relationship attributes as columns in `R`.
+  3. Add Foreign Keys in `R` referencing the Primary Keys of both participating tables.
+  4. The Primary Key of `R` is typically the combination of these Foreign Keys (composite key).
+
+Example: A "Like" between `User` and `Post` becomes table `Like(user_id, post_id)`.
+
+### How to Apply These Instructions
+
+1. Start with Step 1. List all your entities and create a table for each.
+2. For each relationship, determine its type (1:1, 1:N, or M:N).
+3. Follow Steps 2–4 accordingly.
+4. Add constraints (PK, FK, UNIQUE, CHECK) to enforce integrity.
 
 ---
 
@@ -236,7 +291,7 @@ You are asked to design an ERD for the following scenario:
 - **Enrolls_In**:  
   - A student can enroll in many courses.  
   - A course can have many students.  
-  - This is a **many-to-many (M:N)** relationship, resolved with the **Enrollment** table.  
+  - This is a many-to-many (M:N) relationship, resolved with the Enrollment table.  
 
 ### ERD Diagram
 ![Problem 3 Chen Solution](assets/Problem_3_Chen_Solution.png)
@@ -273,6 +328,7 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
 ```
+
 ---
 
 ## Problem 04: Hospital Management System
@@ -361,6 +417,7 @@ CREATE TABLE Appointment (
     FOREIGN KEY (PatientID) REFERENCES Patient(PatientID)
 );
 ```
+
 ---
 
 ## Problem 05: Online Shopping System  
@@ -598,6 +655,7 @@ CREATE TABLE Enrollment (
     FOREIGN KEY (CourseID) REFERENCES Course.CourseID
 );
 ```
+
 ---
 
 ## Problem 07: Project Management System
@@ -676,9 +734,9 @@ You are asked to design an ERD for the following scenario:
 ### Relationships
 - **Project–Task**: 1:N (One Project has many Tasks). A Task must belong to exactly one Project.
 - **Team–Employee**: 1:N (One Team has many Employees). An Employee belongs to one Team.
-- **Task–Task (Dependency)**: M:N (A Task can have many prerequisite tasks, and can be a prerequisite for many other tasks). This is a recursive relationship modeled with the `TaskDependency` associative entity.
-- **Employee–Task (Assignment)**: M:N (An Employee can be assigned many Tasks, and a Task can be assigned to many Employees). Modeled with the `TaskAssignment` associative entity.
-- **Employee–Task (Time Logging)**: The `TimeLog` entity connects an Employee and a Task, representing a many-to-one relationship from `TimeLog` to both `Employee` and `Task`. An employee logs time for a specific task.
+- **Task–Task (Dependency)**: M:N (Recursive) via TaskDependency.
+- **Employee–Task (Assignment)**: M:N via TaskAssignment.
+- **Employee–Task (Time Logging)**: TimeLog references both (each TimeLog belongs to exactly one Employee and one Task).
 
 ### ERD Diagram
 ![Problem 7 Chen Solution](assets/Problem_7_Chen_Solution.png)
@@ -763,3 +821,5 @@ CREATE TABLE TimeLog (
 ```
 
 ---
+
+Happy designing! Feel free to suggest additional problems or contribute improvements via pull requests.
