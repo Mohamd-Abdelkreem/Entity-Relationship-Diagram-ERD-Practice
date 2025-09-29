@@ -28,7 +28,8 @@ This repository is built to help you learn database design by practice.
 ---
 
 ## Purpose
-- Practice creating **Entity Relationship Diagrams (ERDs)**  
+- Practice creating **Entity Relationship Diagrams (ERDs)**
+- Practice creating **Scehma (ER-to-Relational Mapping)**  
 - Work on **simple, real-world scenarios**  
 - Build skills step by step with **guided problems and solutions**  
 
@@ -36,7 +37,7 @@ This repository is built to help you learn database design by practice.
 
 ## Who is this for?
 - Absolute beginners in database design  
-- Students or self-learners looking for hands-on ERD practice  
+- Students or self-learners looking for hands-on ERD and Mapping practice  
 - Anyone who wants to strengthen their fundamentals in database design  
 
 ---
@@ -46,7 +47,7 @@ All problems and solutions are included directly in this README.
 
 1. Read a **Problem** section.  
 2. Try to solve it on your own by identifying entities, attributes, and relationships.  
-3. Draw your own ERD diagram.  
+3. Draw your own ERD diagram and Schema (Mapping).  
 4. Scroll down to the matching **Solution** section to compare with the provided answer.  
 
 ---
