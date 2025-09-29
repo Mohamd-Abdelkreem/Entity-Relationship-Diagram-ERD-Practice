@@ -9,7 +9,7 @@ This repository is built to help you learn database design by practice.
 - [Purpose](#purpose)  
 - [Who is this for?](#who-is-this-for)  
 - [How to Use](#how-to-use)  
-- [Database Design Instructions: Converting User Stories to ERD Graphical Representation](#instructions-converting-user-stories-to-erd-graphical-representation)
+- [Database Design Instructions: Converting User Stories to ERD Graphical Representation](#database-design-instructions-converting-user-stories-to-erd-graphical-representation)
 - [Database Design Instructions: ERD to Relational Schema](#database-design-instructions-erd-to-relational-schema)
 - [Problem 01: Company Employees and Departments](#problem-01-company-employees-and-departments)  
 - [Solution 01: Company Employees and Departments](#solution-01-company-employees-and-departments)  
