@@ -152,7 +152,8 @@ You are asked to design an ERD for the following scenario:
 
 ### ER-to-Relational Mapping
 - **Employee(SSN, FirstName, LastName, BirthDate, Gender, DeptNo)**  
-- **Department(DeptNo, DeptName, Location, ManagerSSN)**  
+- **Department(DeptNo, DeptName, Location, ManagerSSN)**
+  
 ![Problem 1 Schema Solution](assets/ERD_To_Schema_P1.png)
 
 ### PostgreSQL Implementation
@@ -224,7 +225,8 @@ You are asked to design an ERD for the following scenario:
 
 ### ER-to-Relational Mapping
 - **Book(ISBN, Title, Author, PubYear, MemberID)**  
-- **Member(MemberID, Name, Email)**  
+- **Member(MemberID, Name, Email)**
+  
 ![Problem 2 Schema Solution](assets/ERD_To_Schema_P2.png)
 
 ### PostgreSQL Implementation
@@ -302,7 +304,8 @@ You are asked to design an ERD for the following scenario:
 ### ER-to-Relational Mapping
 - **Student(StudentID, Name, Major, Email)**  
 - **Course(CourseID, CourseName, Credits)**  
-- **Enrollment(StudentID, CourseID, Grade)**  
+- **Enrollment(StudentID, CourseID, Grade)**
+  
 ![Problem 3 Schema Solution](assets/ERD_To_Schema_P3.png)
 
 ### PostgreSQL Implementation
@@ -391,6 +394,7 @@ You are asked to design an ERD for the following scenario:
 - **Doctor(DoctorID, Name, Specialty, Phone)**  
 - **Patient(PatientID, Name, Address, Phone)**  
 - **Appointment(AppointmentID, Date, Time, DoctorID, PatientID)**
+  
 ![Problem 4 Schema Solution](assets/ERD_To_Schema_P4.png)
 
 
@@ -496,7 +500,8 @@ You are asked to design an ERD for the following scenario:
 - **Product(ProductID, ProductName, Price, StockQuantity)**  
 - **Order(OrderID, OrderDate, CustomerID)**  
 - **Payment(PaymentID, PaymentDate, Amount, OrderID)**  
-- **OrderProduct(OrderID, ProductID, Quantity)**  
+- **OrderProduct(OrderID, ProductID, Quantity)**
+  
 ![Problem 5 Schema Solution](assets/ERD_To_Schema_P5.png)
 
 ### PostgreSQL Implementation  
@@ -622,6 +627,7 @@ You are asked to design an ERD for the following scenario:
 - **Professor(ProfessorID, Name, Department, Office)**  
 - **Course(CourseID, CourseName, Credits, ProfessorID)**  
 - **Enrollment(StudentID, CourseID, Semester, Year, Grade)**
+  
 ![Problem 6 Schema Solution](assets/ERD_To_Schema_P6.png)
 
 
@@ -758,6 +764,7 @@ You are asked to design an ERD for the following scenario:
 - **TaskDependency(<u>*PrerequisiteTaskID*</u>, <u>*DependentTaskID*</u>)**
 - **TaskAssignment(<u>*EmployeeID*</u>, <u>*TaskID*</u>, AssignmentDate)**
 - **TimeLog(<u>LogID</u>, HoursWorked, LogDate, *EmployeeID*, *TaskID*)**
+  
 ![Problem 7 Schema Solution](assets/ERD_To_Schema_P7.png)
 
 
